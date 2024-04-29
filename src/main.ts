@@ -1,8 +1,5 @@
 import './style.css';
 
-// OUTLINE OF THE PROJECT
-// 1. show a joke on the screen when it loads and create a button
-
 const URL = 'https://v2.jokeapi.dev/joke/Any?type=single';
 const HEADER = { headers: { Accept: 'application/json' } };
 
@@ -54,12 +51,16 @@ nextBtn.addEventListener('click', () => {
   console.log(reportJokes);
 });
 
+function changeScore(score: number) {
+  currentJoke = { ...currentJoke, score };
+}
+
 oneBtn.addEventListener('click', () => {
-  currentJoke = { ...currentJoke, score: 1 };
+  changeScore(1);
 });
 twoBtn.addEventListener('click', () => {
-  currentJoke = { ...currentJoke, score: 2 };
+  changeScore(2);
 });
 threeBtn.addEventListener('click', () => {
-  currentJoke = { ...currentJoke, score: 3 };
+  changeScore(3);
 });
