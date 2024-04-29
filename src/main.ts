@@ -1,5 +1,6 @@
 import './style.css';
 
+// constants
 const URL = 'https://v2.jokeapi.dev/joke/Any?type=single';
 const HEADER = { headers: { Accept: 'application/json' } };
 
@@ -22,25 +23,31 @@ let currentJoke: JokeData;
 
 async function fetchData(url: string): Promise<string | undefined> {
   try {
-    if (!url) new Error('no url provided');
+    if (!url) throw new Error('no url provided');
+
     const res = await fetch(url, HEADER);
-    if (res.ok) {
-      const { joke } = await res.json();
-      console.log(joke);
-      currentJoke = { joke, score: 0, date: new Date().toISOString() };
-      return joke;
-    } else {
-      new Error('No joke found');
-    }
+
+    if (!res.ok) throw new Error('No joke found');
+    const { joke } = await res.json();
+    createJoke(joke);
+    return joke;
   } catch (err) {
     console.error(err);
+    return undefined;
   }
+}
+
+function createJoke(joke: string) {
+  return (currentJoke = { joke, score: 0, date: new Date().toISOString() });
 }
 
 async function printToScreen(element: HTMLElement, url: string) {
   const joke = await fetchData(url);
   if (joke) {
+    console.log(joke);
     element.innerHTML = joke;
+  } else {
+    element.innerHTML = 'Sorry! No joke was found';
   }
 }
 printToScreen(jokeDiv, URL);
