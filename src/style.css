@@ -66,12 +66,18 @@ h1 {
 .btn {
   background-color: #646cff;
   padding: 1em 2em;
+  font-weight: bold;
+  color: white;
 }
 
 .rate-btn:hover {
   background-color: white;
   border-color: #646cff;
   border-width: 2px;
+}
+
+.subtitle {
+  font-weight: bold;
 }
 
 button {

@@ -1,7 +1,11 @@
+import { getChuckJoke } from './chuckNorris';
 import './style.css';
+import { paintWeather } from './weather';
 
+paintWeather();
 // constants
 const URL = 'https://v2.jokeapi.dev/joke/Any?type=single';
+const OTHER_URL = 'https://api.chucknorris.io/jokes/random';
 const HEADER = { headers: { Accept: 'application/json' } };
 
 // selectors
@@ -29,7 +33,7 @@ async function fetchData(url: string): Promise<string | undefined> {
 
     if (!res.ok) throw new Error('No joke found');
     const { joke } = await res.json();
-    createJoke(joke);
+    // createJoke(joke);
     return joke;
   } catch (err) {
     console.error(err);
@@ -46,7 +50,15 @@ function changeScore(score: number) {
 }
 
 async function printToScreen(element: HTMLElement, url: string) {
-  const joke = await fetchData(url);
+  const randomNum = Math.round(Math.random()) + 1;
+  console.log(randomNum);
+  let joke: string;
+  if (randomNum === 1) {
+    joke = (await getChuckJoke()) as string;
+  } else {
+    joke = (await fetchData(url)) as string;
+  }
+  createJoke(joke);
   if (joke) {
     console.log(joke);
     element.innerHTML = joke;
