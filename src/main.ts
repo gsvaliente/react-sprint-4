@@ -41,6 +41,10 @@ function createJoke(joke: string) {
   return (currentJoke = { joke, score: 0, date: new Date().toISOString() });
 }
 
+function changeScore(score: number) {
+  currentJoke = { ...currentJoke, score };
+}
+
 async function printToScreen(element: HTMLElement, url: string) {
   const joke = await fetchData(url);
   if (joke) {
@@ -50,6 +54,7 @@ async function printToScreen(element: HTMLElement, url: string) {
     element.innerHTML = 'Sorry! No joke was found';
   }
 }
+
 printToScreen(jokeDiv, URL);
 
 nextBtn.addEventListener('click', () => {
@@ -57,10 +62,6 @@ nextBtn.addEventListener('click', () => {
   reportJokes = [...reportJokes, currentJoke];
   console.log(reportJokes);
 });
-
-function changeScore(score: number) {
-  currentJoke = { ...currentJoke, score };
-}
 
 oneBtn.addEventListener('click', () => {
   changeScore(1);
