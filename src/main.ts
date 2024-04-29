@@ -24,12 +24,14 @@ type JokeData = {
 let reportJokes: JokeData[] | [] = [];
 let currentJoke: JokeData;
 
-async function fetchData(url: string): Promise<Object> {
+async function fetchData(url: string): Promise<any> {
   try {
     if (!url) throw new Error('no url provided');
 
     const res = await fetch(url, HEADER);
-    const data: Object = await res.json();
+
+    if (!res) throw new Error('No response was found');
+    const data = await res.json();
     return data;
   } catch (err) {
     console.error(err);
@@ -47,7 +49,7 @@ function changeScore(score: number) {
 
 async function printToScreen(element: HTMLElement) {
   const randomNum = Math.round(Math.random()) + 1;
-  console.log(randomNum);
+
   let tempJoke: string;
   if (randomNum === 1) {
     const res = await fetchData(OTHER_URL);
@@ -58,7 +60,6 @@ async function printToScreen(element: HTMLElement) {
   }
   createJoke(tempJoke);
   if (tempJoke) {
-    console.log(tempJoke);
     element.innerHTML = tempJoke;
   } else {
     element.innerHTML = 'Sorry! No joke was found';

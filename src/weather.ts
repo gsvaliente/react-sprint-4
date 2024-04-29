@@ -33,7 +33,7 @@ export async function fetchWeather(): Promise<WeatherObj> {
     weather: [info],
   } = data;
   const weatherObj = { name, main, info };
-  console.log(weatherObj);
+
   return weatherObj;
 }
 
