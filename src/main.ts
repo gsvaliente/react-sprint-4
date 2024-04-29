@@ -1,4 +1,3 @@
-import { getChuckJoke } from './chuckNorris';
 import './style.css';
 import { paintWeather } from './weather';
 
@@ -25,19 +24,16 @@ type JokeData = {
 let reportJokes: JokeData[] | [] = [];
 let currentJoke: JokeData;
 
-async function fetchData(url: string): Promise<string | undefined> {
+async function fetchData(url: string): Promise<Object> {
   try {
     if (!url) throw new Error('no url provided');
 
     const res = await fetch(url, HEADER);
-
-    if (!res.ok) throw new Error('No joke found');
-    const { joke } = await res.json();
-    // createJoke(joke);
-    return joke;
+    const data: Object = await res.json();
+    return data;
   } catch (err) {
     console.error(err);
-    return undefined;
+    return 'Problem fetching joke';
   }
 }
 
@@ -49,28 +45,30 @@ function changeScore(score: number) {
   currentJoke = { ...currentJoke, score };
 }
 
-async function printToScreen(element: HTMLElement, url: string) {
+async function printToScreen(element: HTMLElement) {
   const randomNum = Math.round(Math.random()) + 1;
   console.log(randomNum);
-  let joke: string;
+  let tempJoke: string;
   if (randomNum === 1) {
-    joke = (await getChuckJoke()) as string;
+    const res = await fetchData(OTHER_URL);
+    tempJoke = res.value;
   } else {
-    joke = (await fetchData(url)) as string;
+    const res = await fetchData(URL);
+    tempJoke = res.joke;
   }
-  createJoke(joke);
-  if (joke) {
-    console.log(joke);
-    element.innerHTML = joke;
+  createJoke(tempJoke);
+  if (tempJoke) {
+    console.log(tempJoke);
+    element.innerHTML = tempJoke;
   } else {
     element.innerHTML = 'Sorry! No joke was found';
   }
 }
 
-printToScreen(jokeDiv, URL);
+printToScreen(jokeDiv);
 
 nextBtn.addEventListener('click', () => {
-  printToScreen(jokeDiv, URL);
+  printToScreen(jokeDiv);
   reportJokes = [...reportJokes, currentJoke];
   console.log(reportJokes);
 });
